@@ -58,8 +58,8 @@ tasks.withType(JavaCompile).configureEach {
 
 tasks.register('exportJar', Copy) {
     onlyIf {
-        var outputDirectory = server_plugins
-        if (outputDirectory) {
+        var outputDirectory = getServerPlugin()
+        if (outputDirectory != null) {
             def dir = new File(outputDirectory)
             return dir.exists() && dir.isDirectory()
         }
@@ -67,20 +67,24 @@ tasks.register('exportJar', Copy) {
     }
 
     from(tasks.shadowJar)
-    into(server_plugins)
+    into(getServerPlugin())
+}
+
+private String getServerPlugin() {
+    return findProperty("server_plugins")
 }
 
 tasks.register('cleanServer', Delete) {
     onlyIf {
-        var outputDirectory = server_plugins
-        if (outputDirectory) {
+        var outputDirectory = getServerPlugin()
+        if (outputDirectory != null) {
             def dir = new File(outputDirectory)
             return dir.exists() && dir.isDirectory()
         }
         return false
     }
 
-    delete fileTree(server_plugins) {
+    delete fileTree(getServerPlugin()) {
         include '**/' + rootProject.name + '*.jar'
     }
 }
