@@ -1,0 +1,12 @@
+# The maximum volume of block the plugin can work on
+max_size: 32768
+
+# The plugin default log level. Should be one of these:
+# SEVERE
+# WARNING
+# INFO
+# CONFIG
+# FINE
+# FINER
+# FINEST
+log_level: INFO

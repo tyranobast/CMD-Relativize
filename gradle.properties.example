@@ -1,0 +1,3 @@
+server_plugins=the/path/to/the/plugin/folder/you/want/to/update
+repo_user=username
+repo_pass=password

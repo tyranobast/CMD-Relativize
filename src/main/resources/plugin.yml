@@ -1,0 +1,8 @@
+name: CmdRelativize
+main: fr.skytale.cmdrelativize.CmdRelativize
+version: '1.0-SNAPSHOT'
+api-version: '1.20'
+commands:
+  cmdrelativize:
+    description: Command block relativizer utils
+    permission: cmdrelativize.relativize

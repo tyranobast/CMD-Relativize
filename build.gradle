@@ -1,0 +1,98 @@
+plugins {
+    id 'com.gradleup.shadow' version '9.0.0-beta4'
+    id 'java'
+}
+
+apply plugin: 'com.gradleup.shadow'
+apply plugin: 'java'
+
+group = 'fr.skytale'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven {
+        name = "spigotmc"
+        url = "https://hub.spigotmc.org/nexus/content/repositories/public/"
+    }
+    maven {
+        name = "sonatype"
+        url = "https://oss.sonatype.org/content/groups/public/"
+    }
+    maven {
+        name = "skytale-public"
+        url = "https://repository.skytale.fr/artifactory/public/"
+    }
+}
+
+dependencies {
+    implementation 'org.bukkit:bukkit:1.15.2-R0.1-SNAPSHOT'
+    implementation 'org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT'
+    shadow(group: 'fr.skytale', name: 'item-lib', version: '4.2.8')
+    shadow(group: 'fr.skytale', name: 'command-lib', version: '2.0.1')
+}
+
+def targetJavaVersion = 17
+java {
+    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+    if (JavaVersion.current() < javaVersion) {
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+}
+
+shadowJar {
+    archiveClassifier = ''
+    relocate 'de.tr7zw', 'fr.skytale.cmdrelativize.shaded.de.tr7zw'
+    configurations = [project.configurations.shadow]
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+
+    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
+        options.release.set(targetJavaVersion)
+    }
+}
+
+tasks.register('exportJar', Copy) {
+    onlyIf {
+        var outputDirectory = server_plugins
+        if (outputDirectory) {
+            def dir = new File(outputDirectory)
+            return dir.exists() && dir.isDirectory()
+        }
+        return false
+    }
+
+    from(tasks.shadowJar)
+    into(server_plugins)
+}
+
+tasks.register('cleanServer', Delete) {
+    onlyIf {
+        var outputDirectory = server_plugins
+        if (outputDirectory) {
+            def dir = new File(outputDirectory)
+            return dir.exists() && dir.isDirectory()
+        }
+        return false
+    }
+
+    delete fileTree(server_plugins) {
+        include '**/' + rootProject.name + '*.jar'
+    }
+}
+
+exportJar.dependsOn(cleanServer)
+shadowJar.finalizedBy(exportJar)
+
+processResources {
+    def props = [version: version]
+    inputs.properties props
+    filteringCharset 'UTF-8'
+    filesMatching('paper-plugin.yml') {
+        expand props
+    }
+}

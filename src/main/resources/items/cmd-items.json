@@ -1,0 +1,24 @@
+{
+  "items": [
+    {
+      "technicalName": "cmdWand",
+      "nameTranslationCode": "item.cmd-relativize-wand.name",
+      "type": "HEAD",
+      "headTextureUrl": "http://textures.minecraft.net/texture/53d3e1d18c014131c81d00c04003a47df5f5bc381f8b41b4da7b484f2872cc13",
+      "listenedSlotsEvents": [
+        {
+          "events": [
+            "fr.skytale.itemlib.item.event.event.ItemClickEvent"
+          ],
+          "slots": [
+            "MAIN_HAND"
+          ],
+          "condition": {
+            "type": "ItemClickEvent",
+            "click": "LEFT"
+          }
+        }
+      ]
+    }
+  ]
+}

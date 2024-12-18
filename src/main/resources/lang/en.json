@@ -1,0 +1,13 @@
+{
+  "language": {
+    "languageCode": "en",
+    "language": "English",
+    "isDefault": true
+  },
+  "translations": [
+    {
+      "code": "item.cmd-relativize-wand.name",
+      "translation": "§cCommand Relativizer"
+    }
+  ]
+}

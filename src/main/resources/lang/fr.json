@@ -1,0 +1,13 @@
+{
+  "language": {
+    "languageCode": "fr",
+    "language": "French",
+    "isDefault": false
+  },
+  "translations": [
+    {
+      "code": "item.cmd-relativize-wand.name",
+      "translation": "§cRelativiseur De Commandes"
+    }
+  ]
+}
