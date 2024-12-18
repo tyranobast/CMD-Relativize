@@ -78,8 +78,9 @@ public final class CmdRelativize extends JavaPlugin {
 
             Pattern quotePattern = Pattern.compile("\"(.+?)\"");
 
-            List<String> ruleLines = IOUtils.readLines(resource, Charset.defaultCharset());
+            String[] ruleLines = IOUtils.toString(resource, Charset.defaultCharset()).split("\\n[^>]");
             for (String rule : ruleLines) {
+                rule = rule.replaceAll("\\n>\\s?", "");
                 if (!rule.isBlank() && !rule.startsWith("#")) {
                     boolean recursive = rule.startsWith("recursive");
 
